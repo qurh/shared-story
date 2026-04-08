@@ -12,8 +12,10 @@ subscription_service = SubscriptionService()
 
 
 @router.get("/stories")
-def list_stories() -> dict:
-    return {"success": True, "data": {"stories": story_service.list_stories()}}
+def list_stories(sort: str = Query(default="composite")) -> dict:
+    if sort not in {"composite", "subscribers", "latest_active"}:
+        raise HTTPException(status_code=400, detail="Unsupported sort mode")
+    return {"success": True, "data": {"stories": story_service.list_stories(sort_mode=sort), "sort": sort}}
 
 
 @router.get("/stories/{story_id}")
