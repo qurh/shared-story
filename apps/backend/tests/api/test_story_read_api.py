@@ -37,6 +37,16 @@ def test_get_story_detail(client) -> None:
     assert "activity_preview" in body["data"]["story"]
     assert "insights" in body["data"]["story"]["activity_preview"]
     assert "discussions" in body["data"]["story"]["activity_preview"]
+    assert [item["id"] for item in body["data"]["story"]["activity_preview"]["insights"]] == [
+        "insight-older",
+        "insight-middle",
+        "insight-newest",
+    ]
+    assert [item["id"] for item in body["data"]["story"]["activity_preview"]["discussions"]] == [
+        "discussion-older",
+        "discussion-middle",
+        "discussion-newest",
+    ]
     assert all(item["story_id"] == "story-1" for item in body["data"]["story"]["activity_preview"]["insights"])
     assert all(item["story_id"] == "story-1" for item in body["data"]["story"]["activity_preview"]["discussions"])
     assert body["error"] is None

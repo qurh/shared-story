@@ -1,13 +1,14 @@
+from datetime import datetime
 from copy import deepcopy
 
 from app.services.in_memory_store import DISCUSSIONS, INSIGHTS, STORIES
 from app.services.ranking_service import sort_stories
 
 
-def _latest_by_source_order(items: list[dict], limit: int = 3) -> list[dict]:
-    # The source data is stored oldest -> newest, so we reverse first, take the latest
-    # items, then restore presentation order for stable display.
-    latest = list(reversed(items))[:limit]
+def _latest_by_created_at(items: list[dict], limit: int = 3) -> list[dict]:
+    # created_at is the explicit ordering key: pick the newest items first, then
+    # restore display order so the preview reads oldest-to-newest within the window.
+    latest = sorted(items, key=lambda item: datetime.fromisoformat(item["created_at"]), reverse=True)[:limit]
     latest.reverse()
     return latest
 
@@ -32,8 +33,8 @@ class StoryService:
                     if discussion["story_id"] == story_id and discussion["status"] == "published"
                 ]
                 story_copy["activity_preview"] = {
-                    "insights": _latest_by_source_order(story_insights),
-                    "discussions": _latest_by_source_order(story_discussions),
+                    "insights": _latest_by_created_at(story_insights),
+                    "discussions": _latest_by_created_at(story_discussions),
                 }
                 return story_copy
         return None
