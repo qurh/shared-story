@@ -325,6 +325,11 @@ a {
   padding: 18px;
 }
 
+.detail-main {
+  display: grid;
+  gap: 16px;
+}
+
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -351,6 +356,80 @@ a {
   line-height: 1.8;
 }
 
+.detail-preview-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.detail-panel {
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  border-radius: 16px;
+  background: #fbfcff;
+  padding: 14px;
+}
+
+.detail-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.detail-panel-title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.detail-panel-note {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.detail-panel-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.detail-preview-card {
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 12px 12px 11px;
+}
+
+.detail-preview-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.detail-preview-summary {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 13px;
+}
+
+.detail-preview-body {
+  margin: 8px 0 0;
+  color: #334155;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.detail-discussion-card {
+  background: linear-gradient(180deg, rgba(246, 248, 252, 0.9), rgba(255, 255, 255, 1));
+}
+
+.detail-empty {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 .side-title {
   margin: 0;
   font-size: 14px;
@@ -374,6 +453,38 @@ a {
   background: #fbfcff;
   font-size: 13px;
   color: #334155;
+}
+
+.detail-side {
+  display: grid;
+  gap: 16px;
+}
+
+.detail-continue {
+  border: 1px solid rgba(11, 110, 99, 0.16);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(236, 253, 244, 0.7), rgba(255, 255, 255, 1));
+  padding: 14px;
+}
+
+.detail-continue-text {
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.detail-continue-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 12px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(11, 110, 99, 0.25);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--brand-strong);
+  font-weight: 800;
+  font-size: 13px;
 }
 
 @keyframes fade-up {
@@ -426,6 +537,15 @@ a {
 
   .story-title {
     font-size: 19px;
+  }
+
+  .detail-panel-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .detail-panel-note {
+    white-space: normal;
   }
 }
 

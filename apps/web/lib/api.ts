@@ -21,6 +21,18 @@ export type Story = {
   subscriber_count: number;
   doubt_count: number;
   age_hours: number;
+  activity_preview?: {
+    insights: Array<{
+      id: string;
+      title: string;
+      summary: string;
+      content: string;
+    }>;
+    discussions: Array<{
+      id: string;
+      content: string;
+    }>;
+  };
 };
 
 type StoryListData = {
@@ -74,4 +86,3 @@ export async function fetchStory(storyId: string): Promise<StoryDetailData> {
 export async function searchStories(query: string): Promise<SearchData> {
   return getJson<SearchData>(`/search?q=${encodeURIComponent(query)}`);
 }
-
