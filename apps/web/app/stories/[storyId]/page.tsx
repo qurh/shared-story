@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { fetchStory, type Story } from "@/lib/api";
+import { fetchStory, type StoryDetail } from "@/lib/api";
 
 type StoryDetailProps = {
   params: Promise<{
@@ -11,7 +11,7 @@ type StoryDetailProps = {
 export default async function StoryDetailPage({ params }: StoryDetailProps) {
   const { storyId } = await params;
 
-  let story: Story | null = null;
+  let story: StoryDetail | null = null;
   let loadError: string | null = null;
   try {
     const data = await fetchStory(storyId);
@@ -20,7 +20,9 @@ export default async function StoryDetailPage({ params }: StoryDetailProps) {
     loadError = error instanceof Error ? error.message : "加载失败";
   }
 
-  const preview = story?.activity_preview ?? { insights: [], discussions: [] };
+  const preview = story
+    ? story.activity_preview
+    : { insights: [], discussions: [] };
 
   return (
     <main className="container">

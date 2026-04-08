@@ -10,7 +10,20 @@ type ApiEnvelope<T> = {
 
 export type SortMode = "composite" | "subscribers" | "latest_active";
 
-export type Story = {
+export type StoryPreview = {
+  insights: Array<{
+    id: string;
+    title: string;
+    summary: string;
+    content: string;
+  }>;
+  discussions: Array<{
+    id: string;
+    content: string;
+  }>;
+};
+
+export type StorySummary = {
   id: string;
   title: string;
   summary: string;
@@ -21,31 +34,25 @@ export type Story = {
   subscriber_count: number;
   doubt_count: number;
   age_hours: number;
-  activity_preview?: {
-    insights: Array<{
-      id: string;
-      title: string;
-      summary: string;
-      content: string;
-    }>;
-    discussions: Array<{
-      id: string;
-      content: string;
-    }>;
-  };
 };
 
+export type StoryDetail = StorySummary & {
+  activity_preview: StoryPreview;
+};
+
+export type Story = StorySummary;
+
 type StoryListData = {
-  stories: Story[];
+  stories: StorySummary[];
   sort: SortMode;
 };
 
 type StoryDetailData = {
-  story: Story;
+  story: StoryDetail;
 };
 
 type SearchData = {
-  stories: Story[];
+  stories: StorySummary[];
   fallback: {
     insights: Array<{ id: string; title: string; summary: string }>;
     discussions: Array<{ id: string; content: string }>;
