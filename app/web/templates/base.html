@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}shared-story{% endblock %}</title>
+    <style>
+      body {
+        font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        margin: 24px auto;
+        max-width: 920px;
+        color: #1e293b;
+        background: #f8fafc;
+        line-height: 1.6;
+        padding: 0 16px;
+      }
+      .card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+      }
+      .muted { color: #64748b; font-size: 14px; }
+      .section-title { margin-top: 20px; margin-bottom: 8px; }
+      .topbar { display: flex; gap: 8px; margin-bottom: 14px; }
+      input[type="text"] { flex: 1; padding: 8px 10px; }
+    </style>
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>

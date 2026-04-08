@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Story Feed{% endblock %}
+{% block content %}
+<h1>Story Feed</h1>
+<div class="topbar">
+  <input type="text" placeholder="搜索你感兴趣的故事（Story 优先）" />
+  <span class="muted">排序：{{ sort }}</span>
+</div>
+
+{% for story in stories %}
+<div class="card">
+  <h3><a href="/stories/{{ story.id }}">{{ story.title }}</a></h3>
+  <p>{{ story.summary }}</p>
+  <div class="muted">
+    订阅 {{ story.subscriber_count }} · 讨论 {{ story.discussion_count }} · 角色 {{ story.participant_role_count }} · 存疑 {{ story.doubt_count }}
+  </div>
+</div>
+{% else %}
+<div class="card">
+  <p>当前还没有公开故事，稍后回来看看。</p>
+</div>
+{% endfor %}
+{% endblock %}
