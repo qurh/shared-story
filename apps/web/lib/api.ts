@@ -47,18 +47,18 @@ async function getJson<T>(path: string): Promise<T> {
   try {
     response = await fetch(`${API_BASE}${path}`, { cache: "no-store" });
   } catch {
-    throw new Error(`无法连接后端服务：${API_BASE}`);
+    throw new Error(`Cannot connect backend service: ${API_BASE}`);
   }
 
   let payload: ApiEnvelope<T>;
   try {
     payload = (await response.json()) as ApiEnvelope<T>;
   } catch {
-    throw new Error(`后端返回了非 JSON 响应（HTTP ${response.status}）`);
+    throw new Error(`Backend returned non-JSON response (HTTP ${response.status})`);
   }
 
   if (!response.ok || !payload.success || payload.data == null) {
-    throw new Error(payload.error?.message ?? `请求失败（HTTP ${response.status}）`);
+    throw new Error(payload.error?.message ?? `Request failed (HTTP ${response.status})`);
   }
   return payload.data;
 }
@@ -74,3 +74,4 @@ export async function fetchStory(storyId: string): Promise<StoryDetailData> {
 export async function searchStories(query: string): Promise<SearchData> {
   return getJson<SearchData>(`/search?q=${encodeURIComponent(query)}`);
 }
+

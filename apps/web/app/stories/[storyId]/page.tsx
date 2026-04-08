@@ -22,25 +22,40 @@ export default async function StoryDetailPage({ params }: StoryDetailProps) {
 
   return (
     <main className="container">
-      <Link href="/" className="muted">
-        返回故事流
+      <Link href="/" className="back-link">
+        ← 返回故事列表
       </Link>
-      <article className="card section">
-        {story ? (
-          <>
-            <h1>{story.title}</h1>
-            <p>{story.summary}</p>
+
+      {story ? (
+        <section className="detail-grid">
+          <article className="detail-main">
+            <h1 className="detail-title">{story.title}</h1>
+            <p className="detail-summary">{story.summary}</p>
+
             <div className="meta">
-              <span>订阅 {story.subscriber_count}</span>
-              <span>讨论 {story.discussion_count}</span>
-              <span>存疑 {story.doubt_count}</span>
-              <span>阅读 {story.view_count}</span>
+              <span className="metric">订阅 {story.subscriber_count}</span>
+              <span className="metric">讨论 {story.discussion_count}</span>
+              <span className="metric">存疑 {story.doubt_count}</span>
+              <span className="metric">阅读 {story.view_count}</span>
+              <span className="metric">参与角色 {story.participant_role_count}</span>
             </div>
-          </>
-        ) : (
-          <p className="muted">内容暂时不可用：{loadError ?? "未知错误"}。</p>
-        )}
-      </article>
+          </article>
+
+          <aside className="detail-side">
+            <h2 className="side-title">你能在这里看到什么</h2>
+            <ul className="side-list">
+              <li className="side-item">这个故事最核心的一句话梗概</li>
+              <li className="side-item">不同角色的解读与讨论</li>
+              <li className="side-item">当前热度与关注趋势</li>
+              <li className="side-item">你也可以收藏并持续追踪</li>
+            </ul>
+          </aside>
+        </section>
+      ) : (
+        <article className="notice" style={{ marginTop: "16px" }}>
+          内容暂时不可用：{loadError ?? "未知错误"}。
+        </article>
+      )}
     </main>
   );
 }
