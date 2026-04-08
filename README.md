@@ -99,7 +99,7 @@ npm run build:web
 - UI/UX 设计：[docs/design/2026-04-07-阶段一-UIUX-设计.md](docs/design/2026-04-07-阶段一-UIUX-设计.md)
 - 实施计划：[docs/plans/2026-04-08-阶段一-实施计划.md](docs/plans/2026-04-08-阶段一-实施计划.md)
 - 验收记录：[docs/plans/2026-04-08-阶段一-验收记录.md](docs/plans/2026-04-08-阶段一-验收记录.md)
-- 历史基线方案：[shared-story｜核心架构设计方案 v1.0.md](shared-story｜核心架构设计方案 v1.0.md)
+- 历史基线方案：[docs/architecture/shared-story｜核心架构设计方案 v1.0.md](docs/architecture/shared-story｜核心架构设计方案 v1.0.md)
 
 ## 更新说明
 
