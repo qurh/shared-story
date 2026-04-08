@@ -8,3 +8,15 @@ test("home reflects the story-first browsing experience", async ({ page }) => {
   await expect(page.getByText("最多人关注")).toBeVisible();
   await expect(page.getByText("查看这个故事的更多讨论")).not.toBeVisible();
 });
+
+test("home keeps a visible keyboard focus on sort chips", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByRole("textbox", { name: "搜索故事" }).focus();
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+
+  const firstSortChip = page.locator(".sort-chip").first();
+  await expect(firstSortChip).toBeFocused();
+  await expect(firstSortChip).toHaveCSS("outline-style", "solid");
+});
