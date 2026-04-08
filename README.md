@@ -36,6 +36,19 @@ shared-story/
 ### 1) 后端（FastAPI）
 
 ```powershell
+# 1. 创建并激活虚拟环境
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+# 2. 安装后端依赖（含开发依赖）
+python -m pip install --upgrade pip
+python -m pip install -e apps/backend[dev]
+```
+
+> 如果你的 PowerShell 禁止执行脚本，可以先临时放开当前终端：
+> `Set-ExecutionPolicy -Scope Process RemoteSigned`
+
+```powershell
 # 启动后端（推荐）
 npm run dev:backend
 
@@ -112,7 +125,7 @@ npm run build:web
 2. 浏览故事卡片，确认订阅/讨论是主指标，卡片信息可以快速扫读。
 3. 进入详情页，确认能看到最新解读、最新讨论和继续浏览入口。
 4. 使用键盘切换焦点，确认关键交互元素有可见 focus 状态。
-5. 模拟加载和错误场景，确认页面有清晰的反馈文案和重试入口。
+5. 模拟加载和错误场景，确认页面有清晰的反馈文案；路由级 `error.tsx` 提供“再试一次”重试入口。
 
 推荐验证命令：
 
