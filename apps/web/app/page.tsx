@@ -1,20 +1,34 @@
 import Link from "next/link";
 
-import { fetchStories, searchStories } from "@/lib/api";
+import { fetchStories, searchStories, type SortMode, type Story } from "@/lib/api";
 
 type HomeProps = {
-  searchParams?: {
+  searchParams?: Promise<{
     q?: string;
-    sort?: "composite" | "subscribers" | "latest_active";
-  };
+    sort?: string;
+  }>;
 };
 
-export default async function Home({ searchParams }: HomeProps) {
-  const q = searchParams?.q?.trim() ?? "";
-  const sort = searchParams?.sort ?? "composite";
+function parseSortMode(raw?: string): SortMode {
+  if (raw === "subscribers" || raw === "latest_active") {
+    return raw;
+  }
+  return "composite";
+}
 
-  const listData = q ? await searchStories(q) : await fetchStories(sort);
-  const stories = listData.stories;
+export default async function Home({ searchParams }: HomeProps) {
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const q = resolvedSearchParams.q?.trim() ?? "";
+  const sort = parseSortMode(resolvedSearchParams.sort);
+
+  let stories: Story[] = [];
+  let loadError: string | null = null;
+  try {
+    const listData = q ? await searchStories(q) : await fetchStories(sort);
+    stories = listData.stories;
+  } catch (error) {
+    loadError = error instanceof Error ? error.message : "加载失败";
+  }
 
   return (
     <main className="container">
@@ -28,21 +42,27 @@ export default async function Home({ searchParams }: HomeProps) {
       </section>
 
       <section className="section">
-        <div className="muted">共 {stories.length} 条结果</div>
-        <div className="story-list">
-          {stories.map((story) => (
-            <Link href={`/stories/${story.id}`} key={story.id} className="card story-item">
-              <h3>{story.title}</h3>
-              <p className="muted">{story.summary}</p>
-              <div className="meta">
-                <span>订阅 {story.subscriber_count}</span>
-                <span>讨论 {story.discussion_count}</span>
-                <span>存疑 {story.doubt_count}</span>
-                <span>阅读 {story.view_count}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {loadError ? (
+          <div className="card muted">内容暂时不可用：{loadError}。请确认后端服务已启动。</div>
+        ) : (
+          <>
+            <div className="muted">共 {stories.length} 条结果</div>
+            <div className="story-list">
+              {stories.map((story) => (
+                <Link href={`/stories/${story.id}`} key={story.id} className="card story-item">
+                  <h3>{story.title}</h3>
+                  <p className="muted">{story.summary}</p>
+                  <div className="meta">
+                    <span>订阅 {story.subscriber_count}</span>
+                    <span>讨论 {story.discussion_count}</span>
+                    <span>存疑 {story.doubt_count}</span>
+                    <span>阅读 {story.view_count}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
       </section>
     </main>
   );

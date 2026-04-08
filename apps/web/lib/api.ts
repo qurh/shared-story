@@ -8,6 +8,8 @@ type ApiEnvelope<T> = {
   } | null;
 };
 
+export type SortMode = "composite" | "subscribers" | "latest_active";
+
 export type Story = {
   id: string;
   title: string;
@@ -23,7 +25,7 @@ export type Story = {
 
 type StoryListData = {
   stories: Story[];
-  sort: "composite" | "subscribers" | "latest_active";
+  sort: SortMode;
 };
 
 type StoryDetailData = {
@@ -41,15 +43,27 @@ type SearchData = {
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api/v1";
 
 async function getJson<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, { cache: "no-store" });
-  const payload = (await response.json()) as ApiEnvelope<T>;
-  if (!response.ok || !payload.success || !payload.data) {
-    throw new Error(payload.error?.message ?? "Request failed");
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, { cache: "no-store" });
+  } catch {
+    throw new Error(`无法连接后端服务：${API_BASE}`);
+  }
+
+  let payload: ApiEnvelope<T>;
+  try {
+    payload = (await response.json()) as ApiEnvelope<T>;
+  } catch {
+    throw new Error(`后端返回了非 JSON 响应（HTTP ${response.status}）`);
+  }
+
+  if (!response.ok || !payload.success || payload.data == null) {
+    throw new Error(payload.error?.message ?? `请求失败（HTTP ${response.status}）`);
   }
   return payload.data;
 }
 
-export async function fetchStories(sort: StoryListData["sort"] = "composite"): Promise<StoryListData> {
+export async function fetchStories(sort: SortMode = "composite"): Promise<StoryListData> {
   return getJson<StoryListData>(`/stories?sort=${sort}`);
 }
 
@@ -60,4 +74,3 @@ export async function fetchStory(storyId: string): Promise<StoryDetailData> {
 export async function searchStories(query: string): Promise<SearchData> {
   return getJson<SearchData>(`/search?q=${encodeURIComponent(query)}`);
 }
-
