@@ -8,6 +8,26 @@ def test_search_story_first_with_fallback(client) -> None:
     assert body["error"] is None
 
 
+def test_list_stories_does_not_expose_activity_preview(client) -> None:
+    response = client.get("/api/v1/stories")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert "stories" in body["data"]
+    assert all("activity_preview" not in story for story in body["data"]["stories"])
+    assert body["error"] is None
+
+
+def test_search_stories_does_not_expose_activity_preview(client) -> None:
+    response = client.get("/api/v1/search?q=庄周")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert "stories" in body["data"]
+    assert all("activity_preview" not in story for story in body["data"]["stories"])
+    assert body["error"] is None
+
+
 def test_get_story_detail(client) -> None:
     response = client.get("/api/v1/stories/story-1")
     assert response.status_code == 200
@@ -17,6 +37,8 @@ def test_get_story_detail(client) -> None:
     assert "activity_preview" in body["data"]["story"]
     assert "insights" in body["data"]["story"]["activity_preview"]
     assert "discussions" in body["data"]["story"]["activity_preview"]
+    assert all(item["story_id"] == "story-1" for item in body["data"]["story"]["activity_preview"]["insights"])
+    assert all(item["story_id"] == "story-1" for item in body["data"]["story"]["activity_preview"]["discussions"])
     assert body["error"] is None
 
 

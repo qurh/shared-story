@@ -7,7 +7,8 @@ from app.api.schemas.stories import (
     SearchData,
     SearchFallbackOut,
     StoryDetailData,
-    StoryOut,
+    StoryDetailOut,
+    StorySummaryOut,
     SubscriptionData,
 )
 from app.services.search_service import SearchService
@@ -25,7 +26,7 @@ subscription_service = SubscriptionService()
 def list_stories(sort: str = Query(default="composite")) -> ApiResponse[ListStoriesData]:
     if sort not in {"composite", "subscribers", "latest_active"}:
         raise HTTPException(status_code=400, detail="Unsupported sort mode")
-    stories = [StoryOut.model_validate(story) for story in story_service.list_stories(sort_mode=sort)]
+    stories = [StorySummaryOut.model_validate(story) for story in story_service.list_stories(sort_mode=sort)]
     return ok(ListStoriesData(stories=stories, sort=sort))
 
 
@@ -34,14 +35,14 @@ def get_story(story_id: str) -> ApiResponse[StoryDetailData]:
     story = story_service.get_story(story_id)
     if not story:
         raise HTTPException(status_code=404, detail="Story not found")
-    return ok(StoryDetailData(story=StoryOut.model_validate(story)))
+    return ok(StoryDetailData(story=StoryDetailOut.model_validate(story)))
 
 
 @router.get("/search", response_model=ApiResponse[SearchData])
 def search(q: str = Query(default="", min_length=1)) -> ApiResponse[SearchData]:
     result = search_service.search(q)
     data = SearchData(
-        stories=[StoryOut.model_validate(story) for story in result["stories"]],
+        stories=[StorySummaryOut.model_validate(story) for story in result["stories"]],
         fallback=SearchFallbackOut(
             insights=result["fallback"]["insights"],
             discussions=result["fallback"]["discussions"],

@@ -10,7 +10,7 @@ class ActivityPreviewOut(BaseModel):
     discussions: list["DiscussionOut"] = Field(default_factory=list)
 
 
-class StoryOut(BaseModel):
+class StorySummaryOut(BaseModel):
     id: str
     title: str
     summary: str
@@ -21,6 +21,9 @@ class StoryOut(BaseModel):
     subscriber_count: int = 0
     doubt_count: int = 0
     age_hours: int = 0
+
+
+class StoryDetailOut(StorySummaryOut):
     activity_preview: ActivityPreviewOut = Field(default_factory=ActivityPreviewOut)
 
 
@@ -48,16 +51,16 @@ class SearchFallbackOut(BaseModel):
 
 
 class ListStoriesData(BaseModel):
-    stories: list[StoryOut]
+    stories: list[StorySummaryOut]
     sort: SortMode
 
 
 class StoryDetailData(BaseModel):
-    story: StoryOut
+    story: StoryDetailOut
 
 
 class SearchData(BaseModel):
-    stories: list[StoryOut]
+    stories: list[StorySummaryOut]
     fallback: SearchFallbackOut
 
 
