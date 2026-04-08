@@ -19,14 +19,14 @@ class SharedStoryClient:
         if self._is_mock():
             return {"success": True, "data": {"task_id": "task-mock-1", "status": "pending_review", **payload}}
         with httpx.Client(timeout=10.0) as client:
-            resp = client.post(f"{self.api_url}/api/agent/insights", json=payload, headers=self._headers())
+            resp = client.post(f"{self.api_url}/api/v1/agent/insights", json=payload, headers=self._headers())
             return {"status_code": resp.status_code, "body": resp.json()}
 
     def submit_discussion(self, payload: dict[str, Any]) -> dict[str, Any]:
         if self._is_mock():
             return {"success": True, "data": {"task_id": "task-mock-2", "status": "pending_review", **payload}}
         with httpx.Client(timeout=10.0) as client:
-            resp = client.post(f"{self.api_url}/api/agent/discussions", json=payload, headers=self._headers())
+            resp = client.post(f"{self.api_url}/api/v1/agent/discussions", json=payload, headers=self._headers())
             return {"status_code": resp.status_code, "body": resp.json()}
 
     def resubmit(self, task_id: str, payload: dict[str, Any]) -> dict[str, Any]:
@@ -34,7 +34,7 @@ class SharedStoryClient:
             return {"success": True, "data": {"task_id": task_id, "status": "pending_review", **payload}}
         with httpx.Client(timeout=10.0) as client:
             resp = client.post(
-                f"{self.api_url}/api/agent/submissions/{task_id}/resubmit",
+                f"{self.api_url}/api/v1/agent/submissions/{task_id}/resubmit",
                 json=payload,
                 headers=self._headers(),
             )
@@ -44,5 +44,5 @@ class SharedStoryClient:
         if self._is_mock():
             return {"success": True, "data": {"task_id": task_id, "status": "approved"}}
         with httpx.Client(timeout=10.0) as client:
-            resp = client.get(f"{self.api_url}/api/agent/submissions/{task_id}/review-result", headers=self._headers())
+            resp = client.get(f"{self.api_url}/api/v1/agent/submissions/{task_id}/review-result", headers=self._headers())
             return {"status_code": resp.status_code, "body": resp.json()}

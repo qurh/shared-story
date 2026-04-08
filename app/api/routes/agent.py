@@ -2,8 +2,17 @@ from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 
+from app.api.responses import fail, ok
+from app.api.schemas.agent import (
+    DiscussionSubmission,
+    InsightSubmission,
+    ReviewResultData,
+    ReviewResultOut,
+    SubmissionAcceptedData,
+    SubmissionRejectedData,
+)
+from app.api.schemas.common import ApiResponse
 from app.review.engine import review_submission
 from app.services.in_memory_store import DISCUSSIONS, INSIGHTS
 from app.services.submission_service import SubmissionService
@@ -13,33 +22,19 @@ submission_service = SubmissionService()
 latest_review_result: dict[str, dict] = {}
 
 
-class InsightSubmission(BaseModel):
-    story_id: str
-    role_id: str
-    title: str
-    summary: str
-    content: str
-
-
-class DiscussionSubmission(BaseModel):
-    story_id: str
-    role_id: str
-    content: str
-
-
 def _reject_response(task_id: str, result: dict, status: str = "rejected") -> JSONResponse:
-    return JSONResponse(
+    rejected = SubmissionRejectedData(
+        task_id=task_id,
+        status=status,
+        reason_code=result["reason_code"],
+        reason_text=result["reason_text"],
+        fix_actions=result["fix_actions"],
+    )
+    return fail(
         status_code=422,
-        content={
-            "success": False,
-            "data": {
-                "task_id": task_id,
-                "status": status,
-                "reason_code": result["reason_code"],
-                "reason_text": result["reason_text"],
-                "fix_actions": result["fix_actions"],
-            },
-        },
+        code="REVIEW_REJECTED",
+        message=result["reason_text"] or "Submission rejected by review",
+        data=rejected.model_dump(),
     )
 
 
@@ -52,8 +47,8 @@ def _result_to_dict(code: str, reason_code: str | None, reason_text: str | None,
     }
 
 
-@router.post("/agent/insights")
-def submit_insight(payload: InsightSubmission):
+@router.post("/agent/insights", response_model=ApiResponse[SubmissionAcceptedData])
+def submit_insight(payload: InsightSubmission) -> ApiResponse[SubmissionAcceptedData] | JSONResponse:
     task = submission_service.create_task(owner_role_id=payload.role_id, target_type="insight")
 
     review = review_submission(
@@ -80,14 +75,14 @@ def submit_insight(payload: InsightSubmission):
         )
         task.status = "approved"
         task.target_id = insight_id
-        return {"success": True, "data": {"task_id": task.task_id, "status": task.status, "target_id": insight_id}}
+        return ok(SubmissionAcceptedData(task_id=task.task_id, status=task.status, target_id=insight_id))
 
     submission_service.reject_and_request_revision(task.task_id)
     return _reject_response(task.task_id, review_data)
 
 
-@router.post("/agent/discussions")
-def submit_discussion(payload: DiscussionSubmission):
+@router.post("/agent/discussions", response_model=ApiResponse[SubmissionAcceptedData])
+def submit_discussion(payload: DiscussionSubmission) -> ApiResponse[SubmissionAcceptedData] | JSONResponse:
     task = submission_service.create_task(owner_role_id=payload.role_id, target_type="discussion")
 
     review = review_submission(
@@ -112,14 +107,14 @@ def submit_discussion(payload: DiscussionSubmission):
         )
         task.status = "approved"
         task.target_id = discussion_id
-        return {"success": True, "data": {"task_id": task.task_id, "status": task.status, "target_id": discussion_id}}
+        return ok(SubmissionAcceptedData(task_id=task.task_id, status=task.status, target_id=discussion_id))
 
     submission_service.reject_and_request_revision(task.task_id)
     return _reject_response(task.task_id, review_data)
 
 
-@router.post("/agent/submissions/{task_id}/resubmit")
-def resubmit(task_id: str, payload: InsightSubmission):
+@router.post("/agent/submissions/{task_id}/resubmit", response_model=ApiResponse[SubmissionAcceptedData])
+def resubmit(task_id: str, payload: InsightSubmission) -> ApiResponse[SubmissionAcceptedData] | JSONResponse:
     task = submission_service.get_task(task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -155,24 +150,24 @@ def resubmit(task_id: str, payload: InsightSubmission):
                 }
             )
         task.status = "approved"
-        return {"success": True, "data": {"task_id": task.task_id, "status": task.status}}
+        return ok(SubmissionAcceptedData(task_id=task.task_id, status=task.status, target_id=task.target_id))
 
     submission_service.reject_and_request_revision(task.task_id)
     return _reject_response(task.task_id, review_data)
 
 
-@router.get("/agent/submissions/{task_id}/review-result")
-def get_review_result(task_id: str) -> dict:
+@router.get("/agent/submissions/{task_id}/review-result", response_model=ApiResponse[ReviewResultData])
+def get_review_result(task_id: str) -> ApiResponse[ReviewResultData]:
     task = submission_service.get_task(task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    return {
-        "success": True,
-        "data": {
-            "task_id": task.task_id,
-            "status": task.status,
-            "review_result": latest_review_result.get(task_id),
-            "revision_count": task.revision_count,
-            "max_revisions": task.max_revisions,
-        },
-    }
+    review_result = latest_review_result.get(task_id)
+    return ok(
+        ReviewResultData(
+            task_id=task.task_id,
+            status=task.status,
+            review_result=ReviewResultOut.model_validate(review_result) if review_result else None,
+            revision_count=task.revision_count,
+            max_revisions=task.max_revisions,
+        )
+    )
