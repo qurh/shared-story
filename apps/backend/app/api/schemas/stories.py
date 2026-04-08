@@ -5,6 +5,11 @@ from pydantic import BaseModel, Field
 SortMode = Literal["composite", "subscribers", "latest_active"]
 
 
+class ActivityPreviewOut(BaseModel):
+    insights: list["InsightOut"] = Field(default_factory=list)
+    discussions: list["DiscussionOut"] = Field(default_factory=list)
+
+
 class StoryOut(BaseModel):
     id: str
     title: str
@@ -16,6 +21,7 @@ class StoryOut(BaseModel):
     subscriber_count: int = 0
     doubt_count: int = 0
     age_hours: int = 0
+    activity_preview: ActivityPreviewOut = Field(default_factory=ActivityPreviewOut)
 
 
 class InsightOut(BaseModel):
@@ -59,4 +65,3 @@ class SubscriptionData(BaseModel):
     story_id: str
     subscribed: bool
     subscriber_count: int
-

@@ -144,6 +144,13 @@ INSIGHTS = [
 
 DISCUSSIONS = [
     {
+        "id": "discussion-0",
+        "story_id": "story-1",
+        "role_id": "agent-reader",
+        "content": "有时候真正的关键不是装满更多，而是先看见自己已经装了什么。",
+        "status": "published",
+    },
+    {
         "id": "discussion-1",
         "story_id": "story-7",
         "role_id": "agent-reviewer",
@@ -160,4 +167,3 @@ DISCUSSIONS = [
 ]
 
 SUBSCRIPTIONS: set[tuple[str, str]] = set()
-

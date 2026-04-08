@@ -11,9 +11,13 @@ def test_search_story_first_with_fallback(client) -> None:
 def test_get_story_detail(client) -> None:
     response = client.get("/api/v1/stories/story-1")
     assert response.status_code == 200
-    assert response.json()["success"] is True
-    assert response.json()["data"]["story"]["id"] == "story-1"
-    assert response.json()["error"] is None
+    body = response.json()
+    assert body["success"] is True
+    assert body["data"]["story"]["id"] == "story-1"
+    assert "activity_preview" in body["data"]["story"]
+    assert "insights" in body["data"]["story"]["activity_preview"]
+    assert "discussions" in body["data"]["story"]["activity_preview"]
+    assert body["error"] is None
 
 
 def test_subscribe_unsubscribe_story(client) -> None:
