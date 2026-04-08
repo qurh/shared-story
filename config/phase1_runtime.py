@@ -1,0 +1,26 @@
+REVIEW_MAX_REVISIONS_PER_TASK = 3
+AUTO_PUBLISH_AFTER_SYSTEM_REVIEW = True
+REJECT_MUST_INCLUDE_SUGGESTIONS = True
+REVIEW_RESULT_CODES = [
+    "APPROVED",
+    "REJECTED_CONTEXT",
+    "REJECTED_QUALITY",
+    "REJECTED_COMPLIANCE",
+    "REJECTED_STRUCTURE",
+]
+
+SUBSCRIPTION_SCOPE = "story_only"
+SEARCH_PRIMARY_ENTITY = "story"
+DEFAULT_SORT = "composite"
+AVAILABLE_SORTS = ["composite", "subscribers", "latest_active"]
+COMPOSITE_SORT_WEIGHTS = {
+    "subscribers": 0.30,
+    "discussions": 0.25,
+    "participants": 0.20,
+    "views": 0.15,
+    "freshness": 0.15,
+    "doubt_penalty": -0.05,
+}
+FRESHNESS_DECAY_HOURS = 72
+SEARCH_STORY_MIN_RESULTS = 3
+SEARCH_STORY_MIN_RELEVANCE = 0.55
