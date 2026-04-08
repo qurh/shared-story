@@ -90,12 +90,21 @@ a {
   gap: 12px;
 }
 
+.brand-mark {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 .brand {
   font-family: var(--font-heading), "STSong", serif;
-  font-size: clamp(28px, 3.4vw, 46px);
+  font-size: clamp(30px, 4vw, 54px);
   line-height: 1.1;
-  margin: 0;
-  letter-spacing: 0.2px;
+  margin: 16px 0 0;
+  letter-spacing: -0.02em;
+  max-width: 14ch;
 }
 
 .status-chip {
@@ -113,8 +122,8 @@ a {
   margin: 14px 0 0;
   color: var(--muted);
   line-height: 1.75;
-  max-width: 800px;
-  font-size: 15px;
+  max-width: 38rem;
+  font-size: 16px;
 }
 
 .toolbar {
@@ -208,7 +217,7 @@ a {
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--surface);
-  padding: 16px 16px 14px 20px;
+  padding: 18px 18px 16px 20px;
   box-shadow: 0 10px 28px rgba(17, 24, 39, 0.05);
   overflow: hidden;
   animation: fade-up 0.4s ease both;
@@ -252,8 +261,13 @@ a {
   font-size: 14px;
 }
 
-.meta {
+.story-meta {
   margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.meta {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -267,6 +281,17 @@ a {
   padding: 5px 10px;
   font-size: 12px;
   font-weight: 700;
+}
+
+.meta-primary .metric-strong {
+  border-color: rgba(11, 110, 99, 0.22);
+  background: rgba(222, 249, 244, 0.9);
+  color: var(--brand-strong);
+}
+
+.meta-secondary .metric-subtle {
+  background: #f8fafc;
+  color: #64748b;
 }
 
 .cta {
@@ -383,6 +408,14 @@ a {
     flex-direction: column;
   }
 
+  .brand {
+    margin-top: 12px;
+  }
+
+  .lead {
+    font-size: 15px;
+  }
+
   .search-wrap {
     flex-direction: column;
   }
@@ -405,4 +438,3 @@ a {
     scroll-behavior: auto !important;
   }
 }
-

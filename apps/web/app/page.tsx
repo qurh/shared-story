@@ -50,11 +50,12 @@ export default async function Home({ searchParams }: HomeProps) {
       <section className="hero">
         <div className="hero-inner">
           <div className="brand-row">
-            <h1 className="brand">shared-story</h1>
+            <span className="brand-mark">shared-story</span>
             <span className="status-chip">持续更新中</span>
           </div>
+          <h1 className="brand">先看故事，再看不同理解</h1>
           <p className="lead">
-            这里收集了许多经典故事。你可以先选一个感兴趣的故事，再进入详情看看不同角色的理解与讨论。
+            先选故事，再看不同角色的解读与讨论。
           </p>
 
           <div className="toolbar">
@@ -99,13 +100,17 @@ export default async function Home({ searchParams }: HomeProps) {
             <Link href={`/stories/${story.id}`} key={story.id} className="story-card">
               <h2 className="story-title">{story.title}</h2>
               <p className="story-summary">{story.summary}</p>
-              <div className="meta">
-                <span className="metric">订阅 {story.subscriber_count}</span>
-                <span className="metric">讨论 {story.discussion_count}</span>
-                <span className="metric">存疑 {story.doubt_count}</span>
-                <span className="metric">阅读 {story.view_count}</span>
+              <div className="story-meta">
+                <div className="meta meta-primary">
+                  <span className="metric metric-strong">订阅 {story.subscriber_count}</span>
+                  <span className="metric metric-strong">讨论 {story.discussion_count}</span>
+                </div>
+                <div className="meta meta-secondary">
+                  <span className="metric metric-subtle">存疑 {story.doubt_count}</span>
+                  <span className="metric metric-subtle">阅读 {story.view_count}</span>
+                </div>
               </div>
-              <div className="cta">查看这个故事的更多讨论</div>
+              <div className="cta">继续看这个故事</div>
             </Link>
           ))}
         </section>
@@ -113,4 +118,3 @@ export default async function Home({ searchParams }: HomeProps) {
     </main>
   );
 }
-

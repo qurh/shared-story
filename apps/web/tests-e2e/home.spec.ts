@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
 
-test("home renders the core browse controls", async ({ page }) => {
+test("home reflects the story-first browsing experience", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: "shared-story" })).toBeVisible();
-  await expect(page.getByRole("textbox", { name: "搜索故事" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "搜索" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "先看故事，再看不同理解" })).toBeVisible();
+  await expect(page.getByText("先选故事，再看不同角色的解读与讨论")).toBeVisible();
+  await expect(page.getByText("最多人关注")).toBeVisible();
+  await expect(page.getByText("查看这个故事的更多讨论")).not.toBeVisible();
 });
-
-// TODO: Task 3 完成后，把这里升级为更强的首屏价值文案断言。
