@@ -98,8 +98,30 @@ npm run build:web
 - 架构设计：[docs/architecture/2026-04-07-阶段一-架构设计.md](docs/architecture/2026-04-07-阶段一-架构设计.md)
 - UI/UX 设计：[docs/design/2026-04-07-阶段一-UIUX-设计.md](docs/design/2026-04-07-阶段一-UIUX-设计.md)
 - 实施计划：[docs/plans/2026-04-08-阶段一-实施计划.md](docs/plans/2026-04-08-阶段一-实施计划.md)
-- 验收记录：[docs/plans/2026-04-08-阶段一-验收记录.md](docs/plans/2026-04-08-阶段一-验收记录.md)
+- UI/UX 优化实施计划：[docs/plans/2026-04-08-阶段一-UIUX-优化实施计划.md](docs/plans/2026-04-08-阶段一-UIUX-优化实施计划.md)
+- UI/UX 验收记录：[docs/plans/2026-04-08-阶段一-UIUX-验收记录.md](docs/plans/2026-04-08-阶段一-UIUX-验收记录.md)
 - 历史基线方案：[docs/architecture/shared-story｜核心架构设计方案 v1.0.md](docs/architecture/shared-story｜核心架构设计方案 v1.0.md)
+
+## UI/UX 优化验证方式
+
+本阶段的 UI/UX 验证以“用户能不能更快理解、顺畅浏览、持续追踪”为准，不以单纯视觉变化为准。
+
+建议按下面顺序验证：
+
+1. 打开首页，确认首屏能直接看懂“这是一个什么平台”。
+2. 浏览故事卡片，确认订阅/讨论是主指标，卡片信息可以快速扫读。
+3. 进入详情页，确认能看到最新解读、最新讨论和继续浏览入口。
+4. 使用键盘切换焦点，确认关键交互元素有可见 focus 状态。
+5. 模拟加载和错误场景，确认页面有清晰的反馈文案和重试入口。
+
+推荐验证命令：
+
+```powershell
+.\\.venv\\Scripts\\python.exe -m pytest -q apps/backend/tests/api/test_story_read_api.py
+npm run lint:web
+npm run build:web
+npm --prefix apps/web run test:e2e
+```
 
 ## 更新说明
 
