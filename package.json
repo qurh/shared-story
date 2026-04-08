@@ -1,0 +1,18 @@
+{
+  "name": "shared-story-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "apps/mobile"
+  ],
+  "scripts": {
+    "dev:backend": "uvicorn app.main:app --reload --app-dir apps/backend",
+    "dev:web": "npm --prefix apps/web run dev",
+    "build:web": "npm --prefix apps/web run build",
+    "start:web": "npm --prefix apps/web run start",
+    "lint:web": "npm --prefix apps/web run lint",
+    "test:backend": "python -m pytest -q apps/backend/tests",
+    "lint:backend": "python -m ruff check apps/backend"
+  }
+}
+
