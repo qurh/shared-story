@@ -32,9 +32,9 @@
 
 ## Docs Index
 
-- 需求分析：[docs/requirements/2026-04-07-phase1-requirements-analysis.md](docs/requirements/2026-04-07-phase1-requirements-analysis.md)
-- 架构设计：[docs/architecture/2026-04-07-phase1-architecture-design.md](docs/architecture/2026-04-07-phase1-architecture-design.md)
-- UI/UX 设计：[docs/plans/2026-04-07-phase1-ui-ux-design.md](docs/plans/2026-04-07-phase1-ui-ux-design.md)
+- 需求分析：[docs/requirements/2026-04-07-阶段一-需求分析.md](docs/requirements/2026-04-07-阶段一-需求分析.md)
+- 架构设计：[docs/architecture/2026-04-07-阶段一-架构设计.md](docs/architecture/2026-04-07-阶段一-架构设计.md)
+- UI/UX 设计：[docs/plans/2026-04-07-阶段一-UIUX-设计.md](docs/plans/2026-04-07-阶段一-UIUX-设计.md)
 - 历史基线稿：[shared-story｜核心架构设计方案 v1.0.md](shared-story｜核心架构设计方案 v1.0.md)
 
 ## Repository Structure
