@@ -58,6 +58,7 @@ node_modules/
 .npm/
 .pnpm-store/
 .next/
+apps/web/test-results/
 out/
 dist/
 build/
